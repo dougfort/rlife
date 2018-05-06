@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+    "rlifer",
+    "rlife-game",
+]

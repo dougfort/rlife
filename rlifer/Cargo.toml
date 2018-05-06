@@ -1,0 +1,7 @@
+[package]
+name = "rlifer"
+version = "0.1.0"
+authors = ["dougfort <doug.fort@gmail.com>"]
+
+[dependencies]
+rlife-game = { path = "../rlife-game" }
