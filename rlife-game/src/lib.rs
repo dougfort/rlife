@@ -1,4 +1,3 @@
-use std::io;
 use std::collections::HashMap;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -9,11 +8,14 @@ pub struct Cell {
 
 pub type Generation = Vec<Cell>;
 
-/// parse a string of the form "(x0, y0), (x1, y1)..."
-pub fn parse(str: String) -> Result<Generation, io::Error> {
+pub struct Universe {
+    current: Generation
+}
 
-
-    return Err(io::Error::new(io::ErrorKind::Other, "not implemented"))
+impl Universe {
+    pub fn new(gen: Generation) -> Universe {
+        Universe{current: gen}
+    }
 }
 
 #[derive(Debug)]
@@ -22,45 +24,40 @@ struct CellState {
     count: u32
 }
 
-/// step the generation n into generation n+1
-pub fn step(gen: Generation)-> Result<Generation, io::Error> {
-    let mut neighbor_map: HashMap<Cell, CellState> = HashMap::new();
+impl Iterator for Universe {
+    type Item = Generation;
 
-    for gen_cell in gen {
-        for x in [(gen_cell.x-1), gen_cell.x, (gen_cell.x+1)].iter() {
-            for y in [(gen_cell.y-1), gen_cell.y, (gen_cell.y+1)].iter() {
-                let neighbor_cell = Cell{x: *x, y: *y};
-                let ref mut state = neighbor_map.entry(neighbor_cell).or_insert(CellState{live: false, count:0});
-                if neighbor_cell == gen_cell {
-                    state.live = true;
-                } else {
-                    state.count += 1;
+    fn next(&mut self) -> Option<Generation> {
+        let mut neighbor_map: HashMap<Cell, CellState> = HashMap::new();
+
+        for gen_cell in self.current.clone() {
+            for x in [(gen_cell.x-1), gen_cell.x, (gen_cell.x+1)].iter() {
+                for y in [(gen_cell.y-1), gen_cell.y, (gen_cell.y+1)].iter() {
+                    let neighbor_cell = Cell{x: *x, y: *y};
+                    let ref mut state = neighbor_map.entry(neighbor_cell).or_insert(CellState{live: false, count:0});
+                    if neighbor_cell == gen_cell {
+                        state.live = true;
+                    } else {
+                        state.count += 1;
+                    }
                 }
             }
         }
-    }
 
-    let mut neighbor_vec: Vec<Cell> = vec![];
+        self.current = vec![];
 
-    for (cell, state) in neighbor_map {    
-        println!("{:?} = {:?}", cell, state);   
-        let lives = match state {
-            CellState{live: true, count: 2} => true,
-            CellState{live: true, count: 3} => true,
-            CellState{live: false, count: 3} => true,
-            _ => false
-        }; 
-        if lives {
-            neighbor_vec.push(cell);
+         for (cell, state) in neighbor_map {    
+            let lives = match state {
+                CellState{live: true, count: 2} => true,
+                CellState{live: true, count: 3} => true,
+                CellState{live: false, count: 3} => true,
+                _ => false
+            }; 
+            if lives {
+                self.current.push(cell);
+            }
         }
+        Some(self.current.clone())
     }
-    Ok(neighbor_vec)
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}
