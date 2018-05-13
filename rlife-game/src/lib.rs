@@ -1,9 +1,26 @@
 use std::collections::HashMap;
+use std::str::FromStr;
+use std::num::ParseIntError;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Cell {
     pub x: i32,
     pub y: i32
+}
+
+impl FromStr for Cell {
+    type Err = ParseIntError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let coords: Vec<&str> = s.trim_matches(|p| p == '(' || p == ')' )
+                                 .split(",")
+                                 .collect();
+
+        let x_fromstr = coords[0].parse::<i32>()?;
+        let y_fromstr = coords[1].parse::<i32>()?;
+
+        Ok(Cell { x: x_fromstr, y: y_fromstr })
+    }
 }
 
 pub type Generation = Vec<Cell>;
