@@ -16,8 +16,8 @@ impl FromStr for Cell {
                                  .split(",")
                                  .collect();
 
-        let x_fromstr = coords[0].parse::<i32>()?;
-        let y_fromstr = coords[1].parse::<i32>()?;
+        let x_fromstr = coords[0].trim().parse::<i32>()?;
+        let y_fromstr = coords[1].trim().parse::<i32>()?;
 
         Ok(Cell { x: x_fromstr, y: y_fromstr })
     }
