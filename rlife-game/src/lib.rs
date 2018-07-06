@@ -61,9 +61,13 @@ impl Iterator for Universe {
             }
         }
 
+        if neighbor_map.len() == 0 {
+            return None;
+        }
+
         self.current = vec![];
 
-         for (cell, state) in neighbor_map {    
+        for (cell, state) in neighbor_map {    
             let lives = match state {
                 CellState{live: true, count: 2} => true,
                 CellState{live: true, count: 3} => true,
@@ -74,6 +78,7 @@ impl Iterator for Universe {
                 self.current.push(cell);
             }
         }
+
         Some(self.current.clone())
     }
 }
