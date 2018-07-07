@@ -17,6 +17,9 @@ fn main() {
     generation.push(c3);
     println!("g[{}] = {:?}", 0, generation);
 
-    let generation = step(generation);
-    println!("g[{}] = {:?}", 1, generation);
+    for i in 0..10 {
+        let generation = step(&generation);
+        println!("g[{}] = {:?}", i+1, generation);
+    }
+
 }

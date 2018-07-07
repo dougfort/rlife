@@ -29,7 +29,7 @@ struct CellState {
     count: u32
 }
 
-pub fn step(current: Vec<Cell>) -> Vec<Cell> {
+pub fn step(current: &Vec<Cell>) -> Vec<Cell> {
     let mut neighbor_map: HashMap<Cell, CellState> = HashMap::new();
 
     for gen_cell in current {
@@ -37,7 +37,7 @@ pub fn step(current: Vec<Cell>) -> Vec<Cell> {
             for y in [(gen_cell.y-1), gen_cell.y, (gen_cell.y+1)].iter() {
                 let neighbor_cell = Cell{x: *x, y: *y};
                 let ref mut state = neighbor_map.entry(neighbor_cell).or_insert(CellState{live: false, count:0});
-                if neighbor_cell == gen_cell {
+                if neighbor_cell == *gen_cell {
                     state.live = true;
                 } else {
                     state.count += 1;
