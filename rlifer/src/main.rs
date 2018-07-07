@@ -2,22 +2,21 @@ extern crate rlife_game;
 
 use std::str::FromStr;
 
-use rlife_game::{Cell, Generation, Universe};
+use rlife_game::{Cell, step};
 
 fn main() {
-    let mut gen = Generation::new();
-
+ 
     let c1 = Cell::from_str("(-1, 0)").unwrap();
     let c2 = Cell::from_str("(0, 0)").unwrap();
     let c3 = Cell::from_str("(1, 0)").unwrap();
 
-    gen.push(c1);
-    gen.push(c2);
-    gen.push(c3);
+    let mut generation = vec![];
 
-    let u = Universe::new(gen);
+    generation.push(c1);
+    generation.push(c2);
+    generation.push(c3);
+    println!("g[{}] = {:?}", 0, generation);
 
-    for g in u.take(3) {
-        println!("g[{}] = {:?}", 0, g);
-    }
+    let generation = step(generation);
+    println!("g[{}] = {:?}", 1, generation);
 }
