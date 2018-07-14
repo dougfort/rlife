@@ -51,8 +51,7 @@ pub fn step(current: &Vec<Cell>) -> Vec<Cell> {
     for (cell, state) in neighbor_map {    
         let lives = match state {
             CellState{live: true, count: 2} => true,
-            CellState{live: true, count: 3} => true,
-            CellState{live: false, count: 3} => true,
+            CellState{live: _, count: 3} => true,
             _ => false
         }; 
         if lives {
