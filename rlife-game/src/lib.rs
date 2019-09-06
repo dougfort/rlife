@@ -53,21 +53,16 @@ pub fn step(current: &[Cell]) -> Vec<Cell> {
         }
     }
 
-    let mut next = vec![];
-
-    for (cell, state) in neighbor_map {
-        let lives = match state {
+    neighbor_map
+        .iter()
+        .filter(|(_, state)| match state {
             CellState {
                 live: true,
                 count: 2,
             } => true,
             CellState { count: 3, .. } => true,
             _ => false,
-        };
-        if lives {
-            next.push(cell);
-        }
-    }
-
-    next
+        })
+        .map(|(cell, _)| *cell)
+        .collect()
 }
