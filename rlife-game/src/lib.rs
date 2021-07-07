@@ -55,13 +55,14 @@ pub fn step(current: &[Cell]) -> Vec<Cell> {
 
     neighbor_map
         .iter()
-        .filter(|(_, state)| match state {
-            CellState {
-                live: true,
-                count: 2,
-            } => true,
-            CellState { count: 3, .. } => true,
-            _ => false,
+        .filter(|(_, state)| {
+            matches!(
+                state,
+                CellState {
+                    live: true,
+                    count: 2,
+                } | CellState { count: 3, .. }
+            )
         })
         .map(|(cell, _)| *cell)
         .collect()
